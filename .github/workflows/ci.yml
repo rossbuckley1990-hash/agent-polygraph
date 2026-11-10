@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+
+  self-audit:
+    # AgentPolygraph audits itself: the liar demo MUST be caught (exit 1),
+    # and the honest agent MUST clear (exit 0).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - name: The liar must be caught (expect exit 1)
+        run: |
+          set +e
+          agentpolygraph demo --no-color
+          ec=$?
+          set -e
+          if [ "$ec" -ne 1 ]; then
+            echo "::error::demo was expected to catch the liar (exit 1) but exited $ec"
+            exit 1
+          fi
+      - name: The honest agent must clear (expect exit 0)
+        run: agentpolygraph audit agentpolygraph/examples/the_honest.jsonl --no-color

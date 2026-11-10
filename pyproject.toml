@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentpolygraph"
+version = "0.1.0"
+description = "The polygraph for your AI agent: audits Claude Code sessions — every claim cross-checked against the recorded tool evidence. Zero setup, 100% local."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "agent-polygraph contributors" }]
+keywords = [
+    "ai-agents", "claude-code", "cli", "audit", "verification",
+    "lie-detector", "session-forensics", "developer-tools", "llm",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Quality Assurance",
+]
+
+[project.urls]
+Homepage = "https://github.com/rossbuckley1990-hash/agent-polygraph"
+Issues = "https://github.com/rossbuckley1990-hash/agent-polygraph/issues"
+
+[project.scripts]
+agentpolygraph = "agentpolygraph.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[tool.setuptools]
+packages = ["agentpolygraph"]
+
+[tool.setuptools.package-data]
+agentpolygraph = ["examples/*.jsonl"]
